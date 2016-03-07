@@ -10,8 +10,11 @@ var App = React.createClass({
 	render: function(){
 		return (
 			<main>
+			
 				<h1>Hi React!</h1>
 				<Switch />
+
+				<hr />
 
 				<h1>Fruit list</h1>
 				<FruitList />

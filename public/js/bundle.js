@@ -18834,8 +18834,11 @@ var App = React.createClass({displayName: "App",
 	render: function(){
 		return (
 			React.createElement("main", null, 
+			
 				React.createElement("h1", null, "Hi React!"), 
 				React.createElement(Switch, null), 
+
+				React.createElement("hr", null), 
 
 				React.createElement("h1", null, "Fruit list"), 
 				React.createElement(FruitList, null)
@@ -18898,11 +18901,17 @@ var Switch = React.createClass({displayName: "Switch",
 			zombie_component = React.createElement(Zombie, null)
 		}
 
+		// if currently on, next option = off, and vice versa
+		var next_status = toggleStatus(this.state.status);
+
 		return (
 			React.createElement("div", {className: (this.state.status === 'on' ? 'bg-warning' : 'bg-info') + ' switch-light'}, 
 
-				React.createElement("button", {className: "btn btn-default", onClick: this.switchStatus}, 
-					"Turn ",  toggleStatus(this.state.status) 
+				React.createElement("button", {
+					className: "btn btn-default", 
+					onClick: this.switchStatus
+				}, 
+					"Turn ",  next_status 
 				), 
 				React.createElement(Light, {status: this.state.status}), 
 

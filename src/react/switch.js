@@ -28,11 +28,17 @@ var Switch = React.createClass({
 			zombie_component = <Zombie />
 		}
 
+		// if currently on, next option = off, and vice versa
+		var next_status = toggleStatus(this.state.status);
+
 		return (
 			<div className={(this.state.status === 'on' ? 'bg-warning' : 'bg-info') + ' switch-light' }>
 
-				<button className="btn btn-default" onClick={this.switchStatus}>
-					Turn { toggleStatus(this.state.status) }
+				<button 
+					className="btn btn-default" 
+					onClick={this.switchStatus}
+				>
+					Turn { next_status }
 				</button>
 				<Light status={this.state.status} />
 
