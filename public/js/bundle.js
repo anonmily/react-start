@@ -18823,6 +18823,8 @@ ReactDOM.render(
 
 },{"./app":159,"react":157,"react-dom":1}],159:[function(require,module,exports){
 var React = require('react');
+var Switch = require('./switch');
+var FruitList = require('./fruitlist');
 
 /*--- The main application: Creating a basic component ----*/
 
@@ -18833,11 +18835,40 @@ var App = React.createClass({displayName: "App",
 		return (
 			React.createElement("main", null, 
 				React.createElement("h1", null, "Hi React!"), 
-				React.createElement(Switch, null)
+				React.createElement(Switch, null), 
+
+				React.createElement("h1", null, "Fruit list"), 
+				React.createElement(FruitList, null)
 			)
 		)
 	}
 });
+
+module.exports = App;
+
+},{"./fruitlist":160,"./switch":161,"react":157}],160:[function(require,module,exports){
+var React = require('react');
+
+// component lifecycle
+var FruitList = React.createClass({displayName: "FruitList",
+	render: function(){
+		var fruit_list = ['apple','oranges','peaches','pears'];
+		var fruits = fruit_list.map(function(fruit){
+			return React.createElement("li", {key: fruit, className: "list-group-item"}, fruit)
+		});
+
+		return (
+			React.createElement("ul", {className: "fruits list-group"}, 
+				fruits
+			)
+		);
+	}
+});
+
+module.exports = FruitList;
+
+},{"react":157}],161:[function(require,module,exports){
+var React = require('react');
 
 var Switch = React.createClass({displayName: "Switch",
 
@@ -18857,19 +18888,26 @@ var Switch = React.createClass({displayName: "Switch",
 		// React child component can receiving props.
 		//     e.g. the Light component receives a "status" prop which will vary depending on the current component's state
 
+		// The zombie component only shows up when the lights are off
+		var zombie_component = "";
+		if(this.state.status === 'off'){
+			zombie_component = React.createElement(Zombie, null)
+		}
+
 		return (
 			React.createElement("div", {className: "switch-light"}, 
 
 				React.createElement("button", {className: "btn btn-default", onClick: this.switchStatus}, 
 					"Turn ",  this.state.status.toUpperCase() 
 				), 
+				React.createElement(Light, {status: this.state.status}), 
+
+				zombie_component
 
 
-				React.createElement(Light, {status: this.state.status})
 			)
 		);
 	},
-
 
 	/*---- custom methods can be defined for use in the component ---*/
 	switchStatus: function(){
@@ -18881,6 +18919,8 @@ var Switch = React.createClass({displayName: "Switch",
 		});
 	}
 });
+
+/*----------------------------------------------------------*/
 
 var Light = React.createClass({displayName: "Light",
 	render: function(){
@@ -18895,6 +18935,25 @@ var Light = React.createClass({displayName: "Light",
 	}
 });
 
-module.exports = App;
+/*----------------------------------------------------------*/
+
+// component lifecycle
+
+var Zombie = React.createClass({displayName: "Zombie",
+	componentWillMount: function(){
+		console.log('--zombie--- Lights off! componentWillMount');
+	},
+	componentDidMount: function(){
+		console.log('--zombie---Zombie party time. componentDidMount');
+	},
+	render: function(){
+		return React.createElement("div", {className: "zombie bg-error"}, "I am a nocturnal zombie!")
+	},
+	componentWillUnmount: function(){
+		console.log('--zombie---Lights on! componentWillUnmount');
+	}
+});
+
+module.exports = Switch;
 
 },{"react":157}]},{},[158]);
