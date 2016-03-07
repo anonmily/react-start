@@ -1,7 +1,5 @@
 var gulp = require('gulp'),
     gutil = require('gulp-util'),
-    del = require('del'),
-    autoprefixer = require('gulp-autoprefixer'),
 
     browserify = require('browserify'),
     babelify = require('babelify'),
@@ -13,26 +11,8 @@ var gulp = require('gulp'),
     sass = require('gulp-sass'),
     concat = require('gulp-concat'),
     uglify = require('gulp-uglify'),
-
-    //jshint = require('gulp-jshint'),
-    sourcemaps = require('gulp-sourcemaps'),
-    eslint = require('gulp-eslint'),
-    csslint = require('gulp-csslint'),
-
-    nodemon = require('gulp-nodemon'),
-    mocha = require('gulp-mocha'),
     browserSync = require('browser-sync'),
     reload = browserSync.reload,
-
-    casperjs = require('gulp-casperjs'),
-    sys = require('sys'),
-    exec = require('child_process').exec,
-
-    flatten = require('gulp-flatten'),
-    fs = require('fs'),
-    s3 = require('gulp-s3'),
-    rename = require('gulp-rename'),
-
     _ = require('lodash');
 
 /*----- Scripts ------*/
@@ -53,7 +33,7 @@ gulp.task('scripts:bundle',function(){
             'public/js/frontend.js',
             'public/js/bundle.js'
         ])
-        .pipe(concat('veloxdealerbackend.js'))
+        .pipe(concat('app.js'))
         .on('error', gutil.log)
         .pipe(gulp.dest('public/js'));
 });
@@ -92,10 +72,8 @@ gulp.task('react',['reactify'], function(){
             'public/js/frontend.js',
             'public/js/bundle.js'
         ])
-        .pipe(concat('veloxdealerbackend.js'))
-        .pipe(sourcemaps.init())
+        .pipe(concat('app.js'))
         .pipe(uglify())
-        .pipe(sourcemaps.write())
         .on('error', gutil.log)
         .pipe(gulp.dest('public/js'))
 });
@@ -112,10 +90,6 @@ gulp.task('sassify', function(cb) {
             outputStyle: 'expanded'
         }))
         .on('error', gutil.log)
-        .pipe(autoprefixer({
-            browsers: ['last 2 versions'],
-            cascade: true
-        }))
         .pipe(gulp.dest('./public/css'))
         .pipe(reload({
             stream: true
@@ -134,7 +108,7 @@ gulp.task('sass', ['sassify'], function() {
 
 /*------ Watch ---------*/
 
-gulp.task('browser-sync', ['nodemon'], function() {
+gulp.task('browser-sync', function() {
     return browserSync.init({
         server: {
             baseDir: "./public"
@@ -145,7 +119,7 @@ gulp.task('browser-sync', ['nodemon'], function() {
 gulp.task('watch', function() {
     gulp.watch(['src/sass/*/**.scss', 'src/sass/**.scss'], ['sass']);
     gulp.watch(['src/js/*.js', '!public/js/frontend.js'], ['scripts','reloadjs']);
-    gulp.watch(['src/react/**.js','src/react/*/**.js', 'src/react/*/*/**.js'],['eslint','react','reloadjs']);
+    gulp.watch(['src/react/**.js','src/react/*/**.js', 'src/react/*/*/**.js'],['react','reloadjs']);
 });
 
 gulp.task('default',['sass','scripts','react', 'browser-sync','watch']);
