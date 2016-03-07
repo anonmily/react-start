@@ -18870,6 +18870,10 @@ module.exports = FruitList;
 },{"react":157}],161:[function(require,module,exports){
 var React = require('react');
 
+function toggleStatus(status){
+	return status === 'on' ? 'off' : 'on';
+}
+
 var Switch = React.createClass({displayName: "Switch",
 
 	/*--- the initial state of the component, will vary frequently ---*/
@@ -18895,10 +18899,10 @@ var Switch = React.createClass({displayName: "Switch",
 		}
 
 		return (
-			React.createElement("div", {className: "switch-light"}, 
+			React.createElement("div", {className: (this.state.status === 'on' ? 'bg-warning' : 'bg-info') + ' switch-light'}, 
 
 				React.createElement("button", {className: "btn btn-default", onClick: this.switchStatus}, 
-					"Turn ",  this.state.status.toUpperCase() 
+					"Turn ",  toggleStatus(this.state.status) 
 				), 
 				React.createElement(Light, {status: this.state.status}), 
 
@@ -18912,7 +18916,7 @@ var Switch = React.createClass({displayName: "Switch",
 	/*---- custom methods can be defined for use in the component ---*/
 	switchStatus: function(){
 
-		var new_status = this.state.status === 'on' ? 'off' : 'on';
+		var new_status = toggleStatus( this.state.status )
 
 		this.setState({
 			status: new_status
@@ -18926,10 +18930,22 @@ var Light = React.createClass({displayName: "Light",
 	render: function(){
 		var status = this.props.status;
 
+		var the_sun = "";
+		if(status === 'on'){
+			the_sun = (
+				React.createElement("img", {
+					className: "sun", 
+					src: "http://images.clipartpanda.com/cute-sun-clipart-happy-sun-md.png"}
+				)
+			);
+		}
+
 		// Use brackets to use variable values/evaluate javascript
 		return (
 			React.createElement("div", {className:  (status === 'on' ? 'bg-warning' : 'bg-info') + ' light'}, 
-				"The light is currently ", status
+				"The light is currently ", status, 
+				the_sun
+
 			)
 		);
 	}
@@ -18947,7 +18963,11 @@ var Zombie = React.createClass({displayName: "Zombie",
 		console.log('--zombie---Zombie party time. componentDidMount');
 	},
 	render: function(){
-		return React.createElement("div", {className: "zombie bg-error"}, "I am a nocturnal zombie!")
+		return (
+			React.createElement("div", {className: "zombie bg-error"}, 
+				React.createElement("img", {src: "https://s-media-cache-ak0.pinimg.com/236x/a9/7b/d9/a97bd9027f6dfad11669038ec10ed1c6.jpg"})
+			)
+		)
 	},
 	componentWillUnmount: function(){
 		console.log('--zombie---Lights on! componentWillUnmount');

@@ -1,5 +1,9 @@
 var React = require('react');
 
+function toggleStatus(status){
+	return status === 'on' ? 'off' : 'on';
+}
+
 var Switch = React.createClass({
 
 	/*--- the initial state of the component, will vary frequently ---*/
@@ -25,10 +29,10 @@ var Switch = React.createClass({
 		}
 
 		return (
-			<div className="switch-light">
+			<div className={(this.state.status === 'on' ? 'bg-warning' : 'bg-info') + ' switch-light' }>
 
 				<button className="btn btn-default" onClick={this.switchStatus}>
-					Turn { this.state.status.toUpperCase() }
+					Turn { toggleStatus(this.state.status) }
 				</button>
 				<Light status={this.state.status} />
 
@@ -42,7 +46,7 @@ var Switch = React.createClass({
 	/*---- custom methods can be defined for use in the component ---*/
 	switchStatus: function(){
 
-		var new_status = this.state.status === 'on' ? 'off' : 'on';
+		var new_status = toggleStatus( this.state.status )
 
 		this.setState({
 			status: new_status
@@ -56,10 +60,22 @@ var Light = React.createClass({
 	render: function(){
 		var status = this.props.status;
 
+		var the_sun = "";
+		if(status === 'on'){
+			the_sun = (
+				<img 
+					className="sun"
+					src="http://images.clipartpanda.com/cute-sun-clipart-happy-sun-md.png" 
+				/>
+			);
+		}
+
 		// Use brackets to use variable values/evaluate javascript
 		return (
 			<div className={ (status === 'on' ? 'bg-warning' : 'bg-info') + ' light' }>
 				The light is currently {status}
+				{the_sun}
+
 			</div>
 		);
 	}
@@ -77,7 +93,11 @@ var Zombie = React.createClass({
 		console.log('--zombie---Zombie party time. componentDidMount');
 	},
 	render: function(){
-		return <div className="zombie bg-error">I am a nocturnal zombie!</div>
+		return (
+			<div className="zombie bg-error">
+				<img src="https://s-media-cache-ak0.pinimg.com/236x/a9/7b/d9/a97bd9027f6dfad11669038ec10ed1c6.jpg" />
+			</div>
+		)
 	},
 	componentWillUnmount: function(){
 		console.log('--zombie---Lights on! componentWillUnmount');
