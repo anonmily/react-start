@@ -18824,11 +18824,74 @@ ReactDOM.render(
 },{"./app":159,"react":157,"react-dom":1}],159:[function(require,module,exports){
 var React = require('react');
 
+/*--- The main application: Creating a basic component ----*/
+
 var App = React.createClass({displayName: "App",
+
+	/*--- render the component ---*/
 	render: function(){
 		return (
-			React.createElement("h1", null, "Hi React!")
+			React.createElement("main", null, 
+				React.createElement("h1", null, "Hi React!"), 
+				React.createElement(Switch, null)
+			)
 		)
+	}
+});
+
+var Switch = React.createClass({displayName: "Switch",
+
+	/*--- the initial state of the component, will vary frequently ---*/
+	// try to limit the amount of statue used
+	getInitialState: function(){
+		return {
+			status: 'on'
+		}
+	},
+
+	/*--- render the component ---*/
+	render: function(){
+
+
+		// onClick, onFocus...etc: bind events and event handlers to the component
+		// React child component can receiving props.
+		//     e.g. the Light component receives a "status" prop which will vary depending on the current component's state
+
+		return (
+			React.createElement("div", {className: "switch-light"}, 
+
+				React.createElement("button", {className: "btn btn-default", onClick: this.switchStatus}, 
+					"Turn ",  this.state.status.toUpperCase() 
+				), 
+
+
+				React.createElement(Light, {status: this.state.status})
+			)
+		);
+	},
+
+
+	/*---- custom methods can be defined for use in the component ---*/
+	switchStatus: function(){
+
+		var new_status = this.state.status === 'on' ? 'off' : 'on';
+
+		this.setState({
+			status: new_status
+		});
+	}
+});
+
+var Light = React.createClass({displayName: "Light",
+	render: function(){
+		var status = this.props.status;
+
+		// Use brackets to use variable values/evaluate javascript
+		return (
+			React.createElement("div", {className:  (status === 'on' ? 'bg-warning' : 'bg-info') + ' light'}, 
+				"The light is currently ", status
+			)
+		);
 	}
 });
 
